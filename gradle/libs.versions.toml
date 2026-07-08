@@ -1,0 +1,11 @@
+[versions]
+protobuf = "4.28.2"
+springKafka = "3.3.4"
+testcontainers = "1.20.2"
+
+[libraries]
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+spring-kafka = { module = "org.springframework.kafka:spring-kafka", version.ref = "springKafka" }
+testcontainers-kafka = { module = "org.testcontainers:kafka", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }

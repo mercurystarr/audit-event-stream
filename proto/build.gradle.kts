@@ -1,0 +1,13 @@
+plugins {
+    id("com.google.protobuf")
+}
+
+dependencies {
+    implementation(libs.protobuf.java)
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
+    }
+}
