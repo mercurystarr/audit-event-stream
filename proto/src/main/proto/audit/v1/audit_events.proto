@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package audit.v1;
+
+option java_package = "org.dlai.oidc.auditstream.proto.audit.v1";
+option java_outer_classname = "AuditEventsProto";
+option java_multiple_files = true;
+
+message AuditEventEnvelope {
+    string event_id = 1;
+    string occurred_at = 2;
+    string actor_id = 3;
+    string tenant_id = 4;
+    oneof payload {
+        LoginEvent login_event = 10;
+        PermissionChangedEvent permission_changed_event = 11;
+        AccountUpdatedEvent account_updated_event = 12;
+    }
+}
+
+enum LoginResult {
+    LOGIN_RESULT_UNSPECIFIED = 0;
+    LOGIN_RESULT_SUCCESS = 1;
+    LOGIN_RESULT_FAILURE = 2;
+    LOGIN_RESULT_LOCKED = 3;
+}
+
+message LoginEvent {
+    string user_id = 1;
+    string ip_address = 2;
+    string user_agent = 3;
+    LoginResult result = 4;
+}
+
+enum ChangeType {
+    CHANGE_TYPE_UNSPECIFIED = 0;
+    CHANGE_TYPE_GRANTED = 1;
+    CHANGE_TYPE_REVOKED = 2;
+}
+
+message PermissionChangedEvent {
+    string target_user_id = 1;
+    string permission = 2;
+    ChangeType change_type = 3;
+    string changed_by = 4;
+    string reason = 5;
+}
+
+message AccountUpdatedEvent {
+    string target_user_id = 1;
+    string field_name = 2;
+    string original_value = 3;
+    string new_value = 4;
+}
