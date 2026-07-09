@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.protobuf.java)
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     // not read yet
     // testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation(libs.testcontainers.kafka)

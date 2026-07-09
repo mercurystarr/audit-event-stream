@@ -40,3 +40,6 @@ bin/
 .DS_Store
 
 PLAN.md
+notes/
+CLAUDE.md
+.claude/
