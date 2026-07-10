@@ -36,7 +36,6 @@ class AuditEventPublisherTest {
 
     @BeforeEach
     public void setUp() {
-
         publisher = new AuditEventPublisher(kafkaTemplate, "test-topic");
     }
 
