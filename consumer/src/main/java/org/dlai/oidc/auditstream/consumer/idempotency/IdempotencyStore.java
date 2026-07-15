@@ -10,9 +10,9 @@ import java.time.Duration;
 @Component
 public class IdempotencyStore {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IdempotencyStore.class);
     private final StringRedisTemplate redisTemplate;
     private final Duration ttl = Duration.ofDays(7);
-    private final Logger logger = LoggerFactory.getLogger(IdempotencyStore.class);
 
     public IdempotencyStore(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -22,11 +22,11 @@ public class IdempotencyStore {
         String keyPrefix = "audit:seen:";
         Boolean result = redisTemplate.opsForValue().setIfAbsent(keyPrefix +eventId, "1", ttl);
         if (result == null) {
-            logger.warn("Redis is unavailable");
+            LOG.warn("Redis is unavailable");
             return false;
         }
         if (!result) {
-            logger.info("Duplicate event detected: {}, skipping", eventId);
+            LOG.info("Duplicate event detected: {}, skipping", eventId);
         }
         return result;
     }

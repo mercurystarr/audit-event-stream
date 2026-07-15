@@ -10,6 +10,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
@@ -60,5 +62,18 @@ public class KafkaConsumerConfig {
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backoff);
         errorHandler.addNotRetryableExceptions(InvalidProtocolBufferException.class);
         return errorHandler;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, byte[]> kafkaListenerContainerFactory(
+            ConsumerFactory<String, byte[]> consumerFactory,
+            CommonErrorHandler errorHandler) {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, byte[]>();
+        factory.setConsumerFactory(consumerFactory);
+        factory.setCommonErrorHandler(errorHandler);
+        SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor("audit-consumer-vt");
+        simpleAsyncTaskExecutor.setVirtualThreads(true);
+        factory.getContainerProperties().setListenerTaskExecutor(simpleAsyncTaskExecutor);
+        return factory;
     }
 }
