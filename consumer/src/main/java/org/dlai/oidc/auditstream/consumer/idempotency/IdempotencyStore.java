@@ -2,6 +2,7 @@ package org.dlai.oidc.auditstream.consumer.idempotency;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,11 @@ public class IdempotencyStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(IdempotencyStore.class);
     private final StringRedisTemplate redisTemplate;
-    private final Duration ttl = Duration.ofDays(7);
+    private final Duration ttl;
 
-    public IdempotencyStore(StringRedisTemplate redisTemplate) {
+    public IdempotencyStore(StringRedisTemplate redisTemplate,  @Value("${audit.idempotency.ttl-days:7}") long ttlDays) {
         this.redisTemplate = redisTemplate;
+        this.ttl = Duration.ofDays(ttlDays);
     }
 
     public boolean markProcessed(String eventId) {

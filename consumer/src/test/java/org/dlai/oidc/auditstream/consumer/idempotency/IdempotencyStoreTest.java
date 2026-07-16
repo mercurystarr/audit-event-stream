@@ -27,7 +27,7 @@ public class IdempotencyStoreTest {
 
     @BeforeEach
     public void setUp() {
-        store = new IdempotencyStore(redisTemplate);
+        store = new IdempotencyStore(redisTemplate, 7);
     }
 
     @Test
